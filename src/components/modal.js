@@ -1,8 +1,15 @@
-function openPopap(event) {
-  event.classList.add('popup_is-animated');
-  setTimeout(() => {event.classList.add('popup_is-opened');},5)
+function openPopap(popup) {
+  popup.classList.add('popup_is-animated','popup_is-opened');
+  document.addEventListener('keydown', closeByEsc);
 };
-function closePopap(event) {
-  event.classList.remove('popup_is-opened');
+function closePopap(popup) {
+  popup.classList.remove('popup_is-opened');
+  document.addEventListener('keydown', closeByEsc);
 };
+function closeByEsc(evt) {
+  if(evt.key === "Escape"){
+    const openedPopup = document.querySelector('.popup_is-opened');
+    closePopap(openedPopup);
+}
+}
 export {openPopap, closePopap}

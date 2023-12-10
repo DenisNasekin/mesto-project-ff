@@ -12,7 +12,7 @@ const popapAddCard = document.querySelector('.popup_type_new-card');
 const popapCard = document.querySelector('.popup_type_image');
 
 //Получение данных формы редактирования профиля
-const formElement = document.querySelector('[name = "edit-profile"]');
+const formEditProfile = document.querySelector('[name = "edit-profile"]');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput  = document.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title');
@@ -43,7 +43,7 @@ function handleFormSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   closePopap(popapProfile);
 };
-formElement.addEventListener('submit', handleFormSubmit);
+formEditProfile.addEventListener('submit', handleFormSubmit);
 
 //Добавление карточки
 buttonPopapAddCard.addEventListener('click', function() {
@@ -69,36 +69,18 @@ function openCard(itemLink, itemName) {
   popapCaption.textContent = itemName;
 }
 
-//Закрытие карточки по клику на крестик
-document.addEventListener('click', (event) => {
-  const target = event.target;
-  if(target.matches('.popup__close')){
-    closePopap(popapProfile);
-    closePopap(popapAddCard);
-    closePopap(popapCard);
-  }
-});
-
-//Закрытие карточки по клику на кнопку Esc
-document.addEventListener("keydown", function(event){
-  if(event.key === "Escape"){
-    closePopap(popapProfile);
-    closePopap(popapAddCard);
-    closePopap(popapCard);
-  }
-});
-
-//Закрытие карточки по клику на кнопку оверлею
-document.addEventListener('click', (event) => {
-  const target = event.target;
-  if(target.matches('.popup')){
-    closePopap(popapProfile);
-    closePopap(popapAddCard);
-    closePopap(popapCard);
-  }
+//Закрытие карточки по клику на крестик и оверлей
+document.querySelectorAll('.popup__close').forEach(button => {
+  const buttonsPopup = button.closest('.popup');
+  button.addEventListener('click', () => closePopap(buttonsPopup));
+  buttonsPopup.addEventListener('mousedown', (evt) => {
+    if (evt.target === evt.currentTarget) {
+      closePopap(buttonsPopup);
+    };
+  });
 });
 
 //Вывод карточек на экран
-initialCards.forEach(item => { // Выводим карточки на экран 
+initialCards.forEach(item => {
   cardList.append(createCard(item, deleteCard, likeIt, openCard));
 });
