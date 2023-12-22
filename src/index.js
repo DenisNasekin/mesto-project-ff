@@ -2,6 +2,7 @@ import './pages/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, likeIt} from './components/card.js';
 import {openPopap, closePopap} from './components/modal.js';
+import {enableValidation, clearValidation} from './components/validation.js'
 
 //Получение списка карточек
 const cardList = document.querySelector('.places__list');
@@ -84,3 +85,16 @@ document.querySelectorAll('.popup__close').forEach(button => {
 initialCards.forEach(item => {
   cardList.append(createCard(item, deleteCard, likeIt, openCard));
 });
+
+//Вызов валидации
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'button_inactive',
+  inputErrorClass: 'form__input_type_error',
+  errorClass: 'form__input-error_active'
+});
+
+//Очистка ошибок валидации
+clearValidation(profileForm, validationConfig); 
