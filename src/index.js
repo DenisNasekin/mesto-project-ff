@@ -2,7 +2,7 @@ import './pages/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, likeIt} from './components/card.js';
 import {openPopap, closePopap} from './components/modal.js';
-import {enableValidation, clearValidation} from './components/validation.js'
+import {enableValidation, clearValidation} from './components/validation.js';
 
 //Получение списка карточек
 const cardList = document.querySelector('.places__list');
@@ -32,8 +32,19 @@ const popapCaption = popapCard.querySelector('.popup__caption');
 const buttonPopapProfile = document.querySelector('.profile__edit-button');
 const buttonPopapAddCard = document.querySelector('.profile__add-button');
 
+//Объект данных для валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'button_inactive',
+  inputErrorClass: 'form__input_type_error',
+  errorClass: 'form__input-error_active'
+};
+
 //Редактирование профиля
 buttonPopapProfile.addEventListener('click', function() {
+  clearValidation(popapProfile, validationConfig);
   openPopap(popapProfile);
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
@@ -48,6 +59,7 @@ formEditProfile.addEventListener('submit', handleFormSubmit);
 
 //Добавление карточки
 buttonPopapAddCard.addEventListener('click', function() {
+  clearValidation(popapAddCard, validationConfig);
   openPopap(popapAddCard);
 });
 function addNewCard(evt) {
@@ -59,6 +71,7 @@ function addNewCard(evt) {
   nameCard.value = '';
   linkCard.value = '';
   closePopap(popapAddCard);
+  clearValidation(popapAddCard, validationConfig);
 }
 formNewPlace.addEventListener('submit', addNewCard);
 
@@ -87,14 +100,5 @@ initialCards.forEach(item => {
 });
 
 //Вызов валидации
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'button_inactive',
-  inputErrorClass: 'form__input_type_error',
-  errorClass: 'form__input-error_active'
-});
+enableValidation(validationConfig);
 
-//Очистка ошибок валидации
-clearValidation(profileForm, validationConfig); 

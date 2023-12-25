@@ -1,6 +1,8 @@
+
 function openPopap(popup) {
   popup.classList.add('popup_is-animated','popup_is-opened');
   document.addEventListener('keydown', closeByEsc);
+ 
 };
 function closePopap(popup) {
   popup.classList.remove('popup_is-opened');

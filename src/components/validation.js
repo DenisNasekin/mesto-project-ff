@@ -39,15 +39,15 @@ const hasInvalidInput = (iputList) => {
 const toggleButtonState = (inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
       buttonElement.classList.add('button_inactive');
-      buttonElement.setAttribute('disabled', 'disabled');
+      buttonElement.disabled = true;
     }
-    else { buttonElement.classList.remove('button_inactive');
-           buttonElement.removeAttribute('disabled');
+    else { 
+      buttonElement.classList.remove('button_inactive');
+      buttonElement.disabled = false;
     }
 }
-
+//Событие ввода инпута
 const setEventListeners = (formElement) => {
-    toggleButtonState(inputList, buttonElement);
     const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
     const buttonElement = formElement.querySelector('.popup__button');
     toggleButtonState(inputList, buttonElement)
@@ -59,21 +59,8 @@ const setEventListeners = (formElement) => {
     });
   };
 
-const clearValidation = (form, validationStting) => {
-    setEventListeners();
-    inputList.forEach((input) => {
-      if(input.validity.valid) {
-        input.setCustomValidity("");
-        input.removeAttribute("data-validation")
-      }
-    });
-    if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.setAttribute("disabled", "");
-      }
-}  
 
-  
+//Событие сабмита инпута
 const enableValidation = () => {
     const formList = Array.from(document.querySelectorAll('.popup__form'));
     formList.forEach((formElement) => {
@@ -83,5 +70,17 @@ const enableValidation = () => {
         setEventListeners(formElement);
     })
     }
+
+//Функция отчиски ошибок валидации при закрытии формы    
+const clearValidation = (formElement, validationConfig) => {
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    buttonElement.disabled = true;
+    inputList.forEach((inputElement) => {
+      hideInputError(formElement, inputElement, validationConfig.inputErrorClass, validationConfig.errorClass);
+      inputElement.setCustomValidity("");
+    });
+};
 
 export {enableValidation, clearValidation};
