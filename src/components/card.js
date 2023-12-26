@@ -1,3 +1,5 @@
+import {setLike, deleteLike} from "./api.js" 
+
 const cardTemplate = document.querySelector('#card-template').content; 
 
 function createCard (item, deleteCard, likeIt, openCard) {
