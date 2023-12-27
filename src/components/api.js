@@ -29,6 +29,7 @@ const getCardsInfo = async () => {
     .then((res) => checkRequest(res));
 }
 
+//Массив всех получаемых данных
 const getInitialInfo = async () => {
     return Promise.all([getUserInfo(), getCardsInfo()]);
   };
@@ -78,7 +79,7 @@ const deleteLike = async (cardId) => {
   };  
 
 //Удаление карточки
-const deleteCard = async (cardId) => {
+const deleteCardServ = async (cardId) => {
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: config.headers,
@@ -97,5 +98,6 @@ const updateUserAvatar = async (avatarLink) => {
     })
     .then((res) => checkRequest(res));
   };
+  
 export {getUserInfo, getCardsInfo, getInitialInfo, updateUserInfo, 
-    postNewCard, setLike, deleteLike, deleteCard, updateUserAvatar}
+    postNewCard, setLike, deleteLike, deleteCardServ, updateUserAvatar}

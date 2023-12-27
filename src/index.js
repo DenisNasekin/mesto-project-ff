@@ -1,11 +1,10 @@
 import './pages/index.css';
-import {initialCards} from './scripts/cards.js';
 import {createCard, deleteCard, likeIt} from './components/card.js';
 import {openPopap, closePopap} from './components/modal.js';
 import {enableValidation, clearValidation} from './components/validation.js';
-import {getCardsInfo, getInitialInfo, updateUserInfo, 
-  postNewCard, setLike, deleteLike, updateUserAvatar} from './components/api.js';
+import {getInitialInfo, updateUserInfo, postNewCard, updateUserAvatar} from './components/api.js';
 
+//Переменная ид пользователя
 let userId;
 
 //Получение списка карточек
@@ -17,10 +16,6 @@ const popapAddCard = document.querySelector('.popup_type_new-card');
 const popapCard = document.querySelector('.popup_type_image');
 const popapAvatar = document.querySelector('.popup_type_avatar');
 
-//Получение данных формы редактирования аватара
-const profileAvatar = document.querySelector('.profile__avatar')
-const popapAvatarForm = document.forms["edit-avatar"];
-
 //Получение данных формы редактирования профиля
 const formEditProfile = document.querySelector('[name = "edit-profile"]');
 const nameInput = document.querySelector('.popup__input_type_name');
@@ -28,6 +23,7 @@ const jobInput  = document.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
+const popapAvatarForm = document.forms["edit-avatar"];
 
 //Получение данных формы создания карточки
 const formNewPlace = document.querySelector('[name = "new-place"]');
@@ -59,7 +55,7 @@ function loading(isLoading, button) {
 }; 
 
 
-//открытие и редактирование попапа изменения аватара
+//Открытие и редактирование попапа изменения аватара
 avatarEditButton.addEventListener('click', (evt) => {
   clearValidation(popapAvatarForm, validationConfig);
   popapAvatarForm.reset();
@@ -102,10 +98,11 @@ buttonPopapAddCard.addEventListener('click', function() {
 });
 function addNewCard(evt) {
   evt.preventDefault();
-  const item = {name : nameCard.value,
-                link : linkCard.value} 
-  const newCard = createCard(item, deleteCard, likeIt, openCard);
-  cardList.prepend(newCard);
+  const item = {name: nameCard.value, link: linkCard.value};
+  postNewCard(item)
+  .then((card) => {
+    const newCard = createCard(card, userId, deleteCard, likeIt, openCard);
+    cardList.prepend(newCard);})
   nameCard.value = '';
   linkCard.value = '';
   closePopap(popapAddCard);
@@ -132,23 +129,12 @@ document.querySelectorAll('.popup__close').forEach(button => {
   });
 });
 
-//Вывод карточек на экран
-initialCards.forEach(item => {
-  cardList.append(createCard(item, deleteCard, likeIt, openCard));
-});
+
 
 //Вызов валидации
 enableValidation(validationConfig);
 
 //---АПИ---//
-
-//Получаем данные пользователя
-const fillProfileInfo = (userInfo) => {
-  profileTitle.textContent = userInfo.name;
-  profileDescription.textContent = userInfo.about;
-  profileImage.style.backgroundImage = `url(${userInfo.avatar})`;
-};
-
 
 getInitialInfo()
   .then((result) => {
@@ -161,5 +147,20 @@ getInitialInfo()
   .catch((err) => {
     console.log(err);
   });
+
+//Получаем данные пользователя
+const fillProfileInfo = (userInfo) => {
+  profileTitle.textContent = userInfo.name;
+  profileDescription.textContent = userInfo.about;
+  profileImage.style.backgroundImage = `url(${userInfo.avatar})`;
+};
+
+//Вывод карточек на экран
+function renderInitialCards(initialCards, userId) {
+  initialCards.forEach(item => {
+    cardList.append(createCard(item, userId, deleteCard, likeIt, openCard));
+  });
+}
+
 
 
