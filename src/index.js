@@ -49,11 +49,14 @@ const validationConfig = {
   errorClass: 'form__input-error_active'
 };
 
-//Иконка ожидания сохранения
+//Изменение кнопки при ожидания отправки
 function loading(isLoading, button) {
-  button.textContent = isLoading ? "Сохранение..." : "Сохранить";  
+  if(isLoading) {
+    button.textContent = "Сохранение...";
+  } else {
+    button.textContent = "Сохранить"; 
+  }
 }; 
-
 
 //Открытие и редактирование попапа изменения аватара
 avatarEditButton.addEventListener('click', (evt) => {
@@ -62,12 +65,16 @@ avatarEditButton.addEventListener('click', (evt) => {
   openPopap(popapAvatar);
 });
 function handleAvatarFormSubmit(evt) {
+  loading(true, popapAvatar.querySelector('.popup__button'));
   evt.preventDefault();
   updateUserAvatar(popapAvatarForm.link.value)
    .then((updatedProfile) => {
     fillProfileInfo(updatedProfile);
   closePopap(popapAvatar);
 })
+  .catch((err) => {console.log(err);})
+  .finally(() => {loading(false, popapAvatar.querySelector('.popup__button'));
+});
 }
 popapAvatarForm.addEventListener('submit', handleAvatarFormSubmit)
 
@@ -79,6 +86,7 @@ buttonPopapProfile.addEventListener('click', function() {
   jobInput.value = profileDescription.textContent;
 });
 function handleFormSubmit(evt) {
+  loading(true, popapProfile.querySelector('.popup__button'));
   evt.preventDefault(); 
   updateUserInfo({  
     name: nameInput.value,
@@ -87,7 +95,10 @@ function handleFormSubmit(evt) {
   .then((updatedProfile) => {
     fillProfileInfo(updatedProfile);
   closePopap(popapProfile);
-});
+})
+  .catch((err) => {console.log(err);})
+  .finally(() => {loading(false, popapProfile.querySelector('.popup__button'));
+  });
 };
 formEditProfile.addEventListener('submit', handleFormSubmit);
 
@@ -97,17 +108,22 @@ buttonPopapAddCard.addEventListener('click', function() {
   openPopap(popapAddCard);
 });
 function addNewCard(evt) {
+  loading(true, popapAddCard.querySelector('.popup__button'));
   evt.preventDefault();
   const item = {name: nameCard.value, link: linkCard.value};
   postNewCard(item)
   .then((card) => {
     const newCard = createCard(card, userId, deleteCard, likeIt, openCard);
-    cardList.prepend(newCard);})
+    cardList.prepend(newCard);
   nameCard.value = '';
   linkCard.value = '';
   closePopap(popapAddCard);
-  clearValidation(popapAddCard, validationConfig);
-}
+  })
+  .catch((err) => {console.log(err);})
+  .finally(() => {
+    loading(false, popapAddCard.querySelector('.popup__button'));
+  })
+};
 formNewPlace.addEventListener('submit', addNewCard);
 
 //Увеличение карточки
@@ -129,25 +145,18 @@ document.querySelectorAll('.popup__close').forEach(button => {
   });
 });
 
-
-
 //Вызов валидации
 enableValidation(validationConfig);
 
 //---АПИ---//
-
 getInitialInfo()
   .then((result) => {
     const userInfo = result[0];
     userId = userInfo._id;
     const initialCards = result[1];
     fillProfileInfo(userInfo);
-    renderInitialCards(initialCards, userId);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
+    renderInitialCards(initialCards, userId);})
+  .catch((err) => {console.log(err);});
 //Получаем данные пользователя
 const fillProfileInfo = (userInfo) => {
   profileTitle.textContent = userInfo.name;

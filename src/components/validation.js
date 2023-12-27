@@ -59,7 +59,6 @@ const setEventListeners = (formElement) => {
     });
   };
 
-
 //Событие сабмита инпута
 const enableValidation = () => {
     const formList = Array.from(document.querySelectorAll('.popup__form'));
