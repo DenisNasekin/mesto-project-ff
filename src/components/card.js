@@ -14,15 +14,14 @@ function createCard (item, userId, deleteCard, likeIt, openCard) {
   const deleteButton = cardElement.querySelector('.card__delete-button');
   const likeButton = cardElement.querySelector('.card__like-button');
   //Определяем значение полей
-  cardElement.dataset.cardId = item._id;
-  cardElement.dataset.ownerId = item.owner._id;
+
   cardImageOpen.src = item.link;
   cardImageOpen.alt = item.name;
   cardTitle.textContent = item.name;
   cardLikeCount.textContent = item.likes.length;
   //Проверка ид карточки и ид пользователя для функции удаления
   if (item.owner._id === userId) {
-  deleteButton.addEventListener('click', (evt) => deleteCard(cardElement));
+  deleteButton.addEventListener('click', (evt) => deleteCard(item._id, cardElement));
   } else {deleteButton.remove()}
   //Проверка лайка
   const checkLike = item.likes.some((like) => like._id === userId);
@@ -30,23 +29,24 @@ function createCard (item, userId, deleteCard, likeIt, openCard) {
     likeButton.classList.add('card__like-button_is-active')
   }
   //Ставим лайк при нажатие на кнопку
-  likeButton.addEventListener('click', (evt) => {likeIt(evt, item._id)});
+  likeButton.addEventListener('click', (evt) => {likeIt(evt, item._id, cardElement)});
   //Раскрытие карточки при клике
   cardImageOpen.addEventListener('click', () => {
-    openCard(cardImageOpen.src, cardImageOpen.alt, cardTitle.textContent)});
+    openCard(item.link, item.name, item.name)});
   //Возвращаем карточку
   return cardElement;
 };
 
 //Функция удаление карточки с сервера
-function deleteCard(cardElement) { 
-  deleteCardServ(cardElement.dataset.cardId);
-  cardElement.remove();
+function deleteCard(cardId, cardElement) { 
+  deleteCardServ(cardId)
+  .then(() => {cardElement.remove();})
+  .catch((err) => {console.log(err)});
 }; 
 
 //Функция постановки лайка      
-function likeIt(evt, cardId) {
-  const carrentLike = evt.target.parentNode.querySelector('.card__like-count')
+function likeIt(evt, cardId, cardElement) {
+  const carrentLike = cardElement.querySelector('.card__like-count')
   if (evt.target.classList.contains('card__like-button_is-active')) {
     deleteLike(cardId)
     .then((card) => {

@@ -36,37 +36,37 @@ const hasInvalidInput = (iputList) => {
 }
 
 //Отключение кнопки
-const toggleButtonState = (inputList, buttonElement) => {
+const toggleButtonState = (inputList, buttonElement, formData) => {
     if (hasInvalidInput(inputList)) {
-      buttonElement.classList.add('button_inactive');
+      buttonElement.classList.add(formData.inactiveButtonClass);
       buttonElement.disabled = true;
     }
     else { 
-      buttonElement.classList.remove('button_inactive');
+      buttonElement.classList.remove(formData.inactiveButtonClass);
       buttonElement.disabled = false;
     }
 }
 //Событие ввода инпута
-const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button');
-    toggleButtonState(inputList, buttonElement)
+const setEventListeners = (formElement, formData) => {
+    const inputList = Array.from(formElement.querySelectorAll(formData.inputSelector));
+    const buttonElement = formElement.querySelector(formData.submitButtonSelector);
+    toggleButtonState(inputList, buttonElement, formData)
     inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', function () {
         checkInputValidity(formElement, inputElement);
-        toggleButtonState(inputList, buttonElement)
+        toggleButtonState(inputList, buttonElement, formData)
       });
     });
   };
 
 //Событие сабмита инпута
-const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
+const enableValidation = (formData) => {
+    const formList = Array.from(document.querySelectorAll(formData.formSelector));
     formList.forEach((formElement) => {
       formElement.addEventListener('submit', (evt) => {
         evt.preventDefault();
       });
-        setEventListeners(formElement);
+        setEventListeners(formElement, formData);
     })
     }
 

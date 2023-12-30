@@ -16,6 +16,11 @@ const popapAddCard = document.querySelector('.popup_type_new-card');
 const popapCard = document.querySelector('.popup_type_image');
 const popapAvatar = document.querySelector('.popup_type_avatar');
 
+//Получение кнопок сохранение данных окон
+const buttonSavePopapProfile = popapProfile.querySelector('.popup__button');
+const buttonSavePopapAddCard = popapAddCard.querySelector('.popup__button');
+const buttonSavePopapAvatar = popapAvatar.querySelector('.popup__button');
+
 //Получение данных формы редактирования профиля
 const formEditProfile = document.querySelector('[name = "edit-profile"]');
 const nameInput = document.querySelector('.popup__input_type_name');
@@ -49,15 +54,6 @@ const validationConfig = {
   errorClass: 'form__input-error_active'
 };
 
-//Изменение кнопки при ожидания отправки
-function loading(isLoading, button) {
-  if(isLoading) {
-    button.textContent = "Сохранение...";
-  } else {
-    button.textContent = "Сохранить"; 
-  }
-}; 
-
 //Открытие и редактирование попапа изменения аватара
 avatarEditButton.addEventListener('click', (evt) => {
   clearValidation(popapAvatarForm, validationConfig);
@@ -65,7 +61,7 @@ avatarEditButton.addEventListener('click', (evt) => {
   openPopap(popapAvatar);
 });
 function handleAvatarFormSubmit(evt) {
-  loading(true, popapAvatar.querySelector('.popup__button'));
+  buttonSavePopapAvatar.textContent = buttonSavePopapAvatar.getAttribute('data-loading');
   evt.preventDefault();
   updateUserAvatar(popapAvatarForm.link.value)
    .then((updatedProfile) => {
@@ -73,7 +69,7 @@ function handleAvatarFormSubmit(evt) {
   closePopap(popapAvatar);
 })
   .catch((err) => {console.log(err);})
-  .finally(() => {loading(false, popapAvatar.querySelector('.popup__button'));
+  .finally(() => {buttonSavePopapAvatar.textContent = buttonSavePopapAvatar.getAttribute('data-default-text');
 });
 }
 popapAvatarForm.addEventListener('submit', handleAvatarFormSubmit)
@@ -86,7 +82,7 @@ buttonPopapProfile.addEventListener('click', function() {
   jobInput.value = profileDescription.textContent;
 });
 function handleFormSubmit(evt) {
-  loading(true, popapProfile.querySelector('.popup__button'));
+  buttonSavePopapProfile.textContent = buttonSavePopapProfile.getAttribute('data-loading');
   evt.preventDefault(); 
   updateUserInfo({  
     name: nameInput.value,
@@ -97,7 +93,7 @@ function handleFormSubmit(evt) {
   closePopap(popapProfile);
 })
   .catch((err) => {console.log(err);})
-  .finally(() => {loading(false, popapProfile.querySelector('.popup__button'));
+  .finally(() => {buttonSavePopapProfile.textContent = buttonSavePopapProfile.getAttribute('data-default-text');
   });
 };
 formEditProfile.addEventListener('submit', handleFormSubmit);
@@ -108,7 +104,7 @@ buttonPopapAddCard.addEventListener('click', function() {
   openPopap(popapAddCard);
 });
 function addNewCard(evt) {
-  loading(true, popapAddCard.querySelector('.popup__button'));
+  buttonSavePopapAddCard.textContent = buttonSavePopapAddCard.getAttribute('data-loading');
   evt.preventDefault();
   const item = {name: nameCard.value, link: linkCard.value};
   postNewCard(item)
@@ -120,8 +116,7 @@ function addNewCard(evt) {
   closePopap(popapAddCard);
   })
   .catch((err) => {console.log(err);})
-  .finally(() => {
-    loading(false, popapAddCard.querySelector('.popup__button'));
+  .finally(() => {buttonSavePopapAddCard.textContent = buttonSavePopapAddCard.getAttribute('data-default-text');
   })
 };
 formNewPlace.addEventListener('submit', addNewCard);
