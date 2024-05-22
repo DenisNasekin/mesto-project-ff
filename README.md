@@ -1,12 +1,24 @@
-# Проектная работа Mesto
-Реализована страница позволяющая:
+![image](https://github.com/DenisNasekin/mesto-project-ff/assets/140427738/9b99fe9b-fed4-4e95-8739-102d49d942e9)
+
+
+# Проектная работа mesto-project
+Проект выполнен в рамках учебного курса "Фронтенд разработчик" Яндекс.Практикума<br>
+Макет Figma можно посмотреть <a href = "https://www.figma.com/design/JQhPLs2COLIeZtAtlsBS34/%238-%3C%2F%D0%B7%D0%B0%D0%BA%D1%80%D1%8B%D0%B2%D0%B0%D1%8E%D1%89%D0%B8%D0%B9-%D1%82%D0%B5%D0%B3%3E?node-id=0-1&t=zXrf8ggMvQvRFdLC-0">здесь</a> <br>
+Готовый проект можно посмотреть <a href = "https://denisnasekin.github.io/mesto-project-ff/">здесь</a> <br>
+
+## Задача проекта
+Сверстать адаптивный согласно макета в фигме. Сайт дает возможность пользователям делиться фотографиями.
+
+## Технологии
+- HTML
+- CSS
+- JavaScript
+- API
+
+## Функциональность 
 - редактировать автара
 - редактировать данные пользователя
 - добавлять и удалять карточки
 - ставить и удалять лайки карточкам
 - увеличивать картинку карточки
 
-Стек: html, css, javascript, webpack
-
-Ссылка на сайт:
-https://denisnasekin.github.io/mesto-project-ff/
